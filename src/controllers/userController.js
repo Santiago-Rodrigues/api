@@ -6,13 +6,14 @@ export const createUser = async (req, res) => {
   try {
     const userData = req.body
 
-    const salt = await cryptPassword.genSalt()
+    const salt = await cryptPassword.genSalt(10)
+    const hashPassword = await cryptPassword.hash(userData.password, salt)
 
     const userToCreate = {
       id: crypto.randomUUID(),
       name: userData.name,
       email: userData.email,
-      password: userData.password,
+      password: hashPassword,
     };
     const user = await User.create(userToCreate);
 
