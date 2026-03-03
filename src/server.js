@@ -1,0 +1,25 @@
+import express from "express"
+import User from "./models/User.js"
+import Sequelize from "sequelize"
+import config from "./config/database.js"
+import useRoutes from "./routes/privateRoutes.js"
+import publicRoutes from "./routes/publicRoutes.js"
+
+const app = express()
+app.use(express.json())
+
+const sequelize = new Sequelize(config)
+User.init(sequelize)
+
+app.use("/usuarios", useRoutes)
+app.use("/usuarios", publicRoutes)
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Banco Conectado!")
+    app.listen(3000, () => console.log("Servidor ok!"))
+  })
+  .catch((err) => {
+    console.error(err)
+  })
