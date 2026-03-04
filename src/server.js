@@ -6,9 +6,11 @@ import config from "./config/database.js"
 import privateRoutes from "./routes/privateRoutes.js"
 import publicRoutes from "./routes/publicRoutes.js"
 import auth from "./middlewares/auth.js"
+import cors from "cors"
 
 const app = express()
 app.use(express.json())
+app.use(cors())
 
 const sequelize = new Sequelize(config)
 User.init(sequelize)
