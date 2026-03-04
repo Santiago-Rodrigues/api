@@ -29,8 +29,13 @@ export const createUser = async (req, res) => {
 
 // Encontrar todos os usuários
 export const getAllUsers = async (req, res) => {
-  const users = await User.findAll()
-  res.status(200).json(users)
+  try {
+    const users = await User.findAll({attributes: {exclude: ['id', 'createdAt', 'updatedAt']}})
+    res.status(200).json(users)
+  } catch (error) {
+    console.error("Erro: ", error)
+    res.status(500).json({ message: "Erro ", error: error.message })
+  }
 }
 
 export const deleteUser = async (req, res) => {
@@ -66,7 +71,7 @@ export const userLogin = async (req, res) => {
       { id: user.id },
       SECRET,
       // tempo para deslogar, caso o app fique parado
-      { expiresIn: "1m" },
+      { expiresIn: "1h" },
     )
 
     res.status(200).json({ user, token })

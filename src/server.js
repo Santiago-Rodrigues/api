@@ -5,6 +5,7 @@ import Sequelize from "sequelize"
 import config from "./config/database.js"
 import privateRoutes from "./routes/privateRoutes.js"
 import publicRoutes from "./routes/publicRoutes.js"
+import auth from "./middlewares/auth.js"
 
 const app = express()
 app.use(express.json())
@@ -12,7 +13,7 @@ app.use(express.json())
 const sequelize = new Sequelize(config)
 User.init(sequelize)
 
-app.use("/usuarios", privateRoutes)
+app.use("/usuarios", auth, privateRoutes)
 app.use("/", publicRoutes)
 
 sequelize
